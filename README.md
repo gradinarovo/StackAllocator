@@ -71,10 +71,10 @@ TStack_alloc_error StackAlloc_Validate(const TStack_alloc* sa);
 #define BUFFER_SIZE 1024
 
 int main() {
-    // 1. Create a memory buffer
+    /* 1. Create a memory buffer */
     uint8 buffer[BUFFER_SIZE];
     
-    // 2. Initialize the stack allocator
+    /* 2. Initialize the stack allocator */
     TStack_alloc sa;
     TStack_alloc_error err = StackAlloc_Init(&sa, buffer, BUFFER_SIZE);
     if (err != STACK_ALLOC_OK) {
@@ -82,35 +82,35 @@ int main() {
         return -1;
     }
     
-    // 3. Allocate some memory
+    /* 3. Allocate some memory */
     int* numbers = (int*)StackAlloc_Alloc(&sa, 10 * sizeof(int));
     if (numbers == NULL) {
         printf("Allocation failed\n");
         return -1;
     }
     
-    // 4. Use the allocated memory
+    /* 4. Use the allocated memory */
     for (int i = 0; i < 10; i++) {
         numbers[i] = i * i;
     }
     
-    // 5. Get a marker to free back to later
+    /* 5. Get a marker to free back to later */
     void* marker = StackAlloc_GetMarker(&sa);
     
-    // 6. Allocate more memory
+    /* 6. Allocate more memory */
     char* message = (char*)StackAlloc_Alloc(&sa, 100);
     if (message != NULL) {
         snprintf(message, 100, "Hello, Stack Allocator!");
         printf("%s\n", message);
     }
     
-    // 7. Free memory back to the marker (frees 'message' but keeps 'numbers')
+    /* 7. Free memory back to the marker (frees 'message' but keeps 'numbers') */
     err = StackAlloc_FreeToMarker(&sa, marker);
     if (err != STACK_ALLOC_OK) {
         printf("Failed to free memory: %d\n", err);
     }
     
-    // 8. Reset everything
+    /* 8. Reset everything */
     StackAlloc_Reset(&sa);
     
     return 0;
